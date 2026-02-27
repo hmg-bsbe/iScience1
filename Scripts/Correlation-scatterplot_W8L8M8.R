@@ -1,10 +1,6 @@
 # ================================
 # W8l8 vs W8m8: Merge + All-genes plot + SigBoth coding/noncoding plots
 # Tested with: R 4.5.1 on Ubuntu 22.04.5 LTS (see sessionInfo_*.txt output)
-
-# ================================
-# ================================
-# W8l8 vs W8m8: Merge + All-genes plot + SigBoth coding/noncoding plots
 # ================================
 
 library(readxl)
@@ -21,7 +17,6 @@ w8m8  <- read_excel("W8M8.xlsx")
 # 2) Select required columns
 #    (Include gene_biotype as Type if present)
 # -------------------------------
-# If your file has gene_biotype, keep it. If not, we'll set Type = NA.
 
 if ("gene_biotype" %in% colnames(w8l8)) {
   w8l8_sel <- w8l8 %>% select(gene_name, log2FoldChange, pvalue, gene_biotype)
@@ -104,7 +99,7 @@ sig_both <- merged_all_clean %>% filter(Significant_Both == "YES")
 coding <- sig_both %>% filter(Type == "protein_coding")
 noncoding <- sig_both %>% filter(is.na(Type) | Type != "protein_coding")
 
-# Pearson for coding/noncoding (guard against too-few rows)
+# Pearson for coding/noncoding 
 cor_safe <- function(df) {
   if (nrow(df) < 3) return(NA_real_)
   cor(df$W8L8_Log2FoldChange, df$W8M8_Log2FoldChange, method = "pearson", use = "complete.obs")
@@ -157,7 +152,7 @@ print(p2)
 ggsave("Scatter_SigBoth_NonCoding_W8L8_vs_W8M8.png", p2, width = 6, height = 5, dpi = 300)
 
 # -------------------------------
-# 10) Optional: export tables
+# 10) Export tables
 # -------------------------------
 write.csv(merged_all_clean, "Merged_AllGenes_Clean_W8L8_vs_W8M8.csv", row.names = FALSE)
 write.csv(sig_both, "Merged_SigBoth_W8L8_vs_W8M8.csv", row.names = FALSE)
