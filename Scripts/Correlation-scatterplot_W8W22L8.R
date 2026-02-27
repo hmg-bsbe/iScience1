@@ -20,7 +20,6 @@ w8l8  <- read_excel("W8L8.xlsx")
 # 2) Select required columns
 #    (Include gene_biotype as Type if present)
 # -------------------------------
-# If your file has gene_biotype, keep it. If not, we'll set Type = NA.
 
 if ("gene_biotype" %in% colnames(w8w22)) {
   w8w22_sel <- w8w22 %>% select(gene_name, log2FoldChange, pvalue, gene_biotype)
@@ -70,7 +69,7 @@ cor_allgenes <- cor(merged_all_clean$W8W22_Log2FoldChange,
 cat("Pearson r (all genes):", round(cor_allgenes, 3), "\n")
 
 # -------------------------------
-# 5) Add Significant_Both column (still computed on full merged table)
+# 5) Add Significant_Both column 
 # -------------------------------
 merged_all_clean <- merged_all_clean %>%
   mutate(Significant_Both = ifelse(`P-Value [W8W22]` < 0.05 & `P-Value [W8L8]` < 0.05,
@@ -156,7 +155,7 @@ print(p2)
 ggsave("Scatter_SigBoth_NonCoding_W8W22_vs_W8L8.png", p2, width = 6, height = 5, dpi = 300)
 
 # -------------------------------
-# 10) Optional: export tables
+# 10) Export tables
 # -------------------------------
 write.csv(merged_all_clean, "Merged_AllGenes_Clean_W8W22_vs_W8L8.csv", row.names = FALSE)
 write.csv(sig_both, "Merged_SigBoth_W8W22_vs_W8L8.csv", row.names = FALSE)
