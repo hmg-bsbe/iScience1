@@ -4,10 +4,6 @@
 
 # ================================
 
-# ================================
-# W8W22 vs W8m8: Merge + All-genes plot + SigBoth coding/noncoding plots
-# ================================
-
 library(readxl)
 library(dplyr)
 library(ggplot2)
@@ -22,7 +18,6 @@ w8m8  <- read_excel("W8M8.xlsx")
 # 2) Select required columns
 #    (Include gene_biotype as Type if present)
 # -------------------------------
-# If your file has gene_biotype, keep it. If not, we'll set Type = NA.
 
 if ("gene_biotype" %in% colnames(w8w22)) {
   w8w22_sel <- w8w22 %>% select(gene_name, log2FoldChange, pvalue, gene_biotype)
@@ -158,7 +153,7 @@ print(p2)
 ggsave("Scatter_SigBoth_NonCoding_W8W22_vs_W8M8.png", p2, width = 6, height = 5, dpi = 300)
 
 # -------------------------------
-# 10) Optional: export tables
+# 10) Export tables
 # -------------------------------
 write.csv(merged_all_clean, "Merged_AllGenes_Clean_W8W22_vs_W8M8.csv", row.names = FALSE)
 write.csv(sig_both, "Merged_SigBoth_W8W22_vs_W8M8.csv", row.names = FALSE)
